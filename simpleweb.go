@@ -1,15 +1,11 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
+	"github.com/miccab/simpleweb-go/nonblockingjava"
 )
 
-func handler(writer http.ResponseWriter, request *http.Request)  {
-	fmt.Fprintf(writer, "Hi there, I love %s!", request.URL.Path[1:])
-}
-
 func main() {
-	http.HandleFunc("/", handler)
+	http.HandleFunc("/productGo", nonblockingjava.Handler())
 	http.ListenAndServe(":8080", nil)
 }

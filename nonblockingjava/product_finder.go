@@ -7,7 +7,13 @@ import (
 	_ "github.com/lib/pq"
 	"log"
 	"strconv"
+	"encoding/json"
 )
+
+type Product struct {
+	Id   int      `json:"id"`
+	Name string   `json:"name"`
+}
 
 func Handler() http.HandlerFunc  {
 	db, err := sql.Open("postgres", "user=dropwizard dbname=dropwizard sslmode=disable")
@@ -33,6 +39,8 @@ func fetchProduct(db *sql.DB, productId int,writer http.ResponseWriter) {
 	if (queryResult.Next()) {
 		var name string = ""
 		queryResult.Scan(&name)
-		fmt.Fprintf(writer, "hi product %s", name)
+		product := &Product{Id:productId, Name:name}
+		productJson, _ := json.Marshal(product)
+		fmt.Fprint(writer, string(productJson))
 	}
 }
